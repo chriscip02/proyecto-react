@@ -1,5 +1,19 @@
-.container {
+.containerNavbar {
+  background-color: #b9a00f;
+  height: 100px;
+  display: grid;
+  grid-template-columns: 2fr 4fr 1fr;
+}
+.containerNav {
+  font-size: large;
   display: flex;
-  background-color: #5a7779;
-  justify-content: space-around;
+  justify-content: center;
+  .navLink {
+    margin: 3rem;
+    list-style: none;
+    transition: 0.1s;
+    &:hover {
+      transform: scale(1.02);
+    }
+  }
 }

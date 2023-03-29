@@ -1,9 +1,12 @@
 import React from "react";
+import Card from "../Card/Card";
 
-const ItemListContainer = ({ greeting }) => {
+const ItemListContainer = ({ productos }) => {
   return (
     <div>
-      <h1>{greeting}</h1>
+      {productos.map((producto) => (
+        <Card key={producto.id} producto={producto} />
+      ))}
     </div>
   );
 };
