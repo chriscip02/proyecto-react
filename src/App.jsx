@@ -5,20 +5,25 @@ import CardDetail from "./components/CardDetail/CardDetail";
 
 import ItemListContainer from "./components/ItemListContainer/ItemListContainer";
 import Navbar from "./components/Navbar/Navbar";
-import Saludo from "./components/Saludo/Saludo";
+import db from "../db/firebase-config";
+import { getDocs, collection } from "firebase/firestore";
 
 function App() {
-  const [productos, setProductos] = useState([]);
+  const [items, setItems] = useState([]);
+  const itemsRef = collection(db, "items");
+
+  const getItems = async () => {
+    const itemsCollection = await getDocs(itemsRef);
+    const items = itemsCollection.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    setItems(items);
+  };
 
   useEffect(() => {
-    fetch("https://fakestoreapi.com/products")
-      .then((response) => response.json())
-      .then((data) => {
-        setProductos(data);
-      });
+    getItems();
   }, []);
-
-  console.log(productos);
 
   return (
     <div>
@@ -28,19 +33,21 @@ function App() {
         <Route path="/" element={<Navigate to="/home" />} />
         <Route
           path="/tablets"
-          element={<ItemListContainer productos={productos} />}
+          element={<ItemListContainer productos={items} />}
         />
         <Route
           path="/celulares"
-          element={<ItemListContainer productos={productos} />}
+          element={<ItemListContainer productos={items} />}
         />
         <Route
           path="/notebooks"
-          element={<ItemListContainer productos={productos} />}
+          element={<ItemListContainer productos={items} />}
         />
-        <Route path="/home" element={<p>Estas en HOME</p>} />
+        <Route path="/home" element={<ItemListContainer productos={items} />} />
 
         <Route path="/tablets/:id" element={<CardDetail />}></Route>
+
+        <Route path="/404" element={<h2>404 Not Found</h2>}></Route>
       </Routes>
     </div>
   );
