@@ -3,31 +3,31 @@ import Button from "../Button/Button";
 import Cartwidget from "../Cartwidget/Cartwidget";
 import styles from "./Navbar.module.scss";
 
-const Navbar = () => {
+const Navbar = (carrito) => {
   return (
     <div className={styles.containerNavbar}>
       <div className={styles.containerLogo}>
         <Link className="nav-link" to="/home">
-          <h1>E-Commerce</h1>
+          <img src="" alt="Logo" />
         </Link>
       </div>
 
-      <nav className={styles.containerNav}>
-        <Link className={styles.navLink} to="/tablets">
+      <nav className={styles.containerCategories}>
+        <Link className={styles.navLink} to="/category/tablets">
           <Button texto="Tablets" />
         </Link>
 
-        <Link className={styles.navLink} to="/celulares">
+        <Link className={styles.navLink} to="/category/celulares">
           <Button texto="Celulares" />
         </Link>
 
-        <Link className={styles.navLink} to="/notebooks">
+        <Link className={styles.navLink} to="/category/notebooks">
           <Button texto="Notebooks" />
         </Link>
       </nav>
 
       <div className={styles.containerCartWidget}>
-        <Cartwidget />
+        <Cartwidget carrito={carrito} />
       </div>
     </div>
   );

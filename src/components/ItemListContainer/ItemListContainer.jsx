@@ -1,11 +1,13 @@
-import React from "react";
+import { collection, getDocs } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import db from "../../../db/firebase-config";
 import Card from "../Card/Card";
 
-const ItemListContainer = ({ productos }) => {
+const ItemListContainer = ({ items }) => {
   return (
     <div>
-      {productos.map((producto) => (
-        <Card key={producto.id} producto={producto} />
+      {items.map((item) => (
+        <Card key={item.id} item={item} />
       ))}
     </div>
   );

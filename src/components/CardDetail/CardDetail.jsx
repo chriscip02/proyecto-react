@@ -1,41 +1,49 @@
-import { useEffect, useState } from "react";
+import { doc } from "firebase/firestore";
+import { useContext, useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
+import db from "../../../db/firebase-config";
+import { getDoc } from "firebase/firestore";
+import { CartContext } from "../../contexts/ShoppingCartContext";
 
-const CardDetail = () => {
-  const [producto, setProducto] = useState({});
+const CardDetail = (agregarAlCarrito) => {
+  const [item, setItem] = useState({});
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
-  const getProducto = async () => {
-    try {
-      const response = await fetch(`https://fakestoreapi.com/products/${id}`);
-      const data = await response.json();
-      setProducto(data);
-      setLoading(false);
-    } catch (error) {
-      setProducto(null);
+  const getItem = async () => {
+    const itemDoc = doc(db, "items", id);
+    const item = await getDoc(itemDoc);
+    if (item.exists()) {
+      setItem(item.data());
+    } else {
+      console.log("No such document!");
     }
   };
 
   useEffect(() => {
-    getProducto();
+    getItem();
   }, []);
 
-  if (!producto) {
-    return <Navigate to="/404" />;
-  }
+  //Estado para agregar productos al carrito
+  const [productos, setProductos] = useState([]);
+  const [carrito, setCarrito] = useState([]);
 
-  if (loading) {
-    return <h3>Loading...</h3>;
-  }
+  const handleClick = () => {
+    const agregarAlCarrito = (item) => {
+      setCarrito([...carrito, item]);
+      console.log(carrito);
+    };
+  };
 
   return (
     <div>
-      <h3>{producto.title}</h3>
-      <img src={producto.image} alt={producto.title} />
-      <p>{producto.description}</p>
-      <p>{producto.price}</p>
-      <p>{producto.category}</p>
+      <h3>{item.title}</h3>
+      <img src={item.image} alt={item.title} />
+      <p>$ {item.price}</p>
+      <p>{item.description}</p>
+      <p>Categoría: {item.category}</p>
+      <p>Stock: {item.stock}</p>
+      <button onClick={handleClick}>Agregar al carrito</button>
     </div>
   );
 };
