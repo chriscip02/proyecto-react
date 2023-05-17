@@ -1,26 +1,15 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import db from "../../../db/firebase-config";
 import Card from "../Card/Card";
+import { ItemContext } from "../../contexts/ItemContext";
 
 const ItemListCelulares = () => {
-  const [items, setItems] = useState([]);
-  const itemsRef = collection(db, "items");
-
-  const getItems = async () => {
-    const q = query(itemsRef, where("category", "==", "celulares"));
-    const itemsCollection = await getDocs(q);
-    const items = itemsCollection.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
-    setItems(items);
-    console.log(items);
-  };
+  const { items, setCategory } = useContext(ItemContext);
 
   useEffect(() => {
-    getItems();
-  }, []);
+    setCategory("celulares");
+  }, [setCategory]);
 
   return (
     <div>
